@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加载高德地图</title>
+    <!-- 1. 新建容器，存放地图 -->
+     <style>
+        html,
+        body,
+        #container{
+            width: 100%;
+            height: 100%;
+        }
+     </style>
+     <!-- 2. 添加高德API资源 -->
+     <script type="text/javascript">
+        window._AMapSecurityConfig = {
+          securityJsCode: "aaa0527424ccf34078089641b3ccc441",
+        };
+      </script>
+      <script src="https://webapi.amap.com/maps?v=2.0&key=5b2ac4c7df776f166e504ac71d517cbd"></script>
+      
+</head>
+<body>
+    
+    <div id="container"></div> 
+    <script>
+        const map = new AMap.Map('container',{
+            center: [102.759575,25.06049756], 
+            zoom: 13,
+            viewMode: '2D',
+            pitch: 45,
+        })
+        var path = [
+  new AMap.LngLat(102.75509,25.061155),
+  new AMap.LngLat(102.754931,25.061693),
+  new AMap.LngLat(102.755157,25.062503),
+  new AMap.LngLat(102.7555,25.063064),
+  new AMap.LngLat(102.756085,25.063488),
+  new AMap.LngLat(102.756868,25.063758),
+  new AMap.LngLat(102.757457,25.063481),
+  new AMap.LngLat(102.758945,25.062511),
+  new AMap.LngLat(102.759707,25.06292),
+  new AMap.LngLat(102.760704,25.063097),
+  new AMap.LngLat(102.762559,25.064822),
+  new AMap.LngLat(102.763822,25.063019),
+  new AMap.LngLat(102.764106,25.061822),
+  new AMap.LngLat(102.764023,25.059632),
+  new AMap.LngLat(102.764023,25.059632),
+  new AMap.LngLat(102.765202,25.057026),
+  new AMap.LngLat(102.763538,25.055905),
+  new AMap.LngLat(102.761756,25.055329),
+  new AMap.LngLat(102.759991,25.055844),
+  new AMap.LngLat(102.759255,25.055723),
+  new AMap.LngLat(102.758695,25.056064),
+  new AMap.LngLat(102.758026,25.056231),
+  new AMap.LngLat(102.757091,25.055829),
+  new AMap.LngLat(102.755895,25.056375),
+  new AMap.LngLat(102.75372,25.056625),
+  new AMap.LngLat(102.753704,25.056412),
+  new AMap.LngLat(102.753436,25.056231),
+  new AMap.LngLat(102.753394,25.055647),
+  new AMap.LngLat(102.751596,25.05595),
+  new AMap.LngLat(102.751136,25.057526),
+  new AMap.LngLat(102.752299,25.057753),
+  new AMap.LngLat(102.753127,25.058428),
+  new AMap.LngLat(102.757342,25.058216),
+  new AMap.LngLat(102.756489,25.059701),
+  new AMap.LngLat(102.755472,25.060769),
+  new AMap.LngLat(102.75509,25.061155),
+
+];
+var polygon = new AMap.Polygon({
+  path: path, //路径
+  fillColor: "#f5deb3", //多边形填充颜色
+  strokeWeight: 2, //线条宽度，默认为 2
+  strokeColor: "blue", //线条颜色
+});
+//多边形 Polygon对象添加到 Map
+map.add(polygon);
+//将覆盖物调整到合适视野
+map.setFitView([polygon])
+AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.Geolocation','AMap.ControlBar','AMap.HawkEye','AMap.MapType'],function(){ 
+  var toolbar = new AMap.ToolBar({
+        position: {
+            top: '175px',
+            right: '45px'
+        }
+    }); //缩放工具条实例化 
+  var Scale = new AMap.Scale({position:'RB'});
+  var ControlBar =new AMap.ControlBar({
+        position: {
+            top: '60px',
+            right: '45px'
+        }
+      })
+  var Geolocation=new AMap.Geolocation(
+  {
+    position:{
+      top:'250px',
+      right:'45px'
+    }
+    });
+  var HawkEye=new AMap.HawkEye({
+        position: {
+            top: '500px',
+            right: '45px'
+        }
+      });
+  var MapType=new AMap.MapType(
+  {
+    position:{
+      top:'250px',
+      right:'45px'
+    }
+    } );
+  map.addControl(ControlBar);
+  map.addControl(Geolocation);//添加定位空间
+  map.addControl(toolbar); //添加缩放控件
+  map.addControl(Scale); //添加比例尺控件
+  map.addControl(HawkEye);
+  map.addControl(MapType);
+});
+console.log(AMap);
+AMap.plugin("AMap.Driving", function () {
+
+var driving = new AMap.Driving({
+
+        map: map,
+
+        policy:3,
+
+    }); 
+AMap.plugin("AMap.DragRoute", function () {
+
+  //path 是驾车导航的起、途径和终点，最多支持16个途经点
+
+  var path = [];
+  path.push([102.752425,25.057817]);
+  path.push([102.755716,25.057714]);
+  path.push([102.757076,25.057697]);
+  path.push([102.75697,25.057022]);
+  path.push([102.759497,25.057138]);
+  path.push([102.75881,25.060168]);
+  path.push([102.757573,25.061262]);
+  path.push([102.757898,25.062477]);
+  path.push([102.759013,25.061616]);
+  path.push([102.761413,25.06226]);
+
+  var route = new AMap.DragRoute(map, path, 0);
+
+  //查询导航路径并开启拖拽导航
+
+  route.search();
+
+});
+var text = new AMap.Text({
+position: new AMap.LngLat(102.758791,25.060332),
+anchor :'bottom-right',
+text:'致真楼',
+style:{'background-color':'green','font-size':'10px'},
+});
+map.add(text);
+});
+var text = new AMap.Text({
+position: new AMap.LngLat(102.755813,25.057231),
+anchor :'bottom-right',
+text:'致信楼',
+style:{'background-color':'green','font-size':'10px'},
+});
+map.add(text);
+var text = new AMap.Text({
+
+position: new AMap.LngLat(102.757926,25.061454),
+
+anchor :'bottom-right',
+
+text:'北图书馆',
+
+style:{'background-color':'red','font-size':'10px'},
+
+
+
+});
+
+map.add(text);
+var text = new AMap.Text({
+
+position: new AMap.LngLat(102.756843,25.061623),
+
+anchor :'bottom-right',
+
+text:'至善楼',
+
+style:{'background-color':'green','font-size':'10px'},
+
+
+
+});
+
+map.add(text);
+var text = new AMap.Text({
+
+position: new AMap.LngLat(102.757336,25.05685),
+
+anchor :'bottom-right',
+
+text:'南图书馆',
+
+style:{'background-color':'red','font-size':'10px'},
+
+
+
+});
+
+map.add(text);
+var text = new AMap.Text({
+
+position: new AMap.LngLat(102.759016,25.061747),
+
+anchor :'bottom-right',
+
+text:'松苑餐厅',
+
+style:{'background-color':'green','font-size':'10px'},
+
+
+
+});
+
+map.add(text);
+var text = new AMap.Text({
+
+position: new AMap.LngLat(102.758085,25.062651),
+
+anchor :'bottom-right',
+
+text:'竹苑餐厅',
+
+style:{'background-color':'red','font-size':'10px'},
+
+
+
+});
+
+map.add(text);
+var text = new AMap.Text({
+
+position: new AMap.LngLat(102.760119,25.057331),
+
+anchor :'bottom-right',
+
+text:'秋海',
+
+style:{'background-color':'red','font-size':'10px'},
+
+
+
+});
+
+map.add(text);
+var text = new AMap.Text({
+position: new AMap.LngLat(102.761767,25.058626),
+anchor :'bottom-right',
+text:'第四食堂',
+style:{'background-color':'red','font-size':'10px'},
+});
+
+map.add(text);
+var text = new AMap.Text({
+position: new AMap.LngLat(102.761936,25.062816),
+anchor :'bottom-right',
+text:'足球场',
+style:{'background-color':'white','font-size':'10px'},
+});
+map.add(text);
+var markersData = [
+        {position: [102.757535,25.057681], title: "日知亭", content: '“日知亭”其名“日知”源于《论语》子张篇第五章。子夏曰：“日知其所亡，月无忘其所能，可谓好学也已矣。”意为：每天知道一些过去所不知道的知识，每月不忘记（那些）已经掌握的东西，（这样）可以称为好学的人。'},
+        {position: [102.757784,25.062037], title: "标本馆", content:'收藏有植物、脊椎动物、昆虫、木材、植物病理与真菌五大类标本近50余万份，包括部分师生个人收藏和捐赠。对学校教学、科研、对外合作、交流与宣传起到了重要作用。'},
+        {position: [102.757208,25.061919], title: "双亭院", content:'西南林业大学和北京林业大学兄弟情深，1969年北林南迁入滇，于1973年与原昆明农林学院林学院在安宁楸木园合并组建云南林学院，从此两校结缘彩云之南。1978年，北林回迁北京，西林独立办学。尽管南北相隔，两校依然情深谊长，志同道合，有着共同建设祖国林业事业的初心与目标，为铭记手足之情，两校共同商定建亭事宜，西林建南亭，北林建北亭，以此明志。'},
+        {position: [102.760119,25.057331], title: "秋海", content:'秋海，位于第四教学楼旁。“秋海”这个名字是为了缅怀云南林业高等教育事业的奠基者、西林先贤——张海秋先生。'},
+        {position: [102.758826,25.061005], title: "名家园", content:'八秩学府，名家辈出。徐永椿先生、任玮先生、曹诚一先生、薛纪如先生都是一代严师之典范。他们毕生致力于西林，为林业事业躬耕一生。'},
+    ];
+    const icon=new AMap.Icon({image:'./BB.ICO',imageSize:[20,20]})
+    // 遍历数据添加标记点
+    markersData.forEach(function(item) {
+        const marker = new AMap.Marker({
+            position: item.position,
+            title: item.title,
+            icon:icon,
+        });
+        // 添加点击事件以显示信息窗口
+        marker.on('click', function() {
+            var infoWindow = new AMap.InfoWindow({
+                content: "<div style='width:200px;text-align:center;padding:10px;'>" + item.content + "</div>",
+                offset: new AMap.Pixel(0, -30)
+            });
+            infoWindow.open(map, marker.getPosition());
+        });
+        // 将标记点添加到地图上
+        map.add(marker);
+    });
+    </script>
+</body>
+</html>
